@@ -2,7 +2,7 @@
 
 SwiftSlug is a simple package to convert strings to URL slugs. A "slug" is the address of a page on your website, which for SEO reasons is often created using the title of your page. SwiftSlug is responsible for converting a string such as "Hello, world!" into "hello-world" so it's safe to use in a URL.
 
-SwiftSlug works on both macOS and Linux, although it operates quite differently on both platforms due to API limitations. On macOS, SwiftSlug uses an ICU transform so that all UTF-8 characters are correctly transliterated into Latin letters, but on Linux this approach is not available so it does a lossy ASCII conversion instead.
+SwiftSlug works on both macOS and Linux, although it operates quite differently on both platforms due to API limitations. On macOS 10.11 or later, SwiftSlug uses an ICU transform so that all UTF-8 characters are correctly transliterated into Latin letters, but on Linux this approach is not available so it does a lossy ASCII conversion instead.
 
 **If you can think of any way to improve cross-platform transliteration, pull requests are most welcome!**
 
@@ -19,38 +19,28 @@ if let slug = try? "Hello, world".convertedToSlug() {
 
 The method will throw `SlugConversionError.failedToConvert` if transliteration could not take place for some reason, or if the resulting slug had zero characters.
 
-**Note:** On macOS, SwiftSlug uses APIs that were introduced in El Capitan, so you should add an availability check if needed:
-
-```swift
-if #available(OSX 10.11, *) {
-    if let slug = try? "Hello, world".convertedToSlug() {
-        print(slug)
-    }
-}
-```
+**Note:** Although macOS 10.10 is supported, it's preferable to set a deployment target of 10.11 (El Capitan) or later to get the best results.
 
 
 ## Examples
 
 ```swift
-if #available(OSX 10.11, *) {
-    if let slug1 = try? "Hello, world".convertedToSlug() {
-        print(slug1)
-    } else {
-        print("slug1 could not be converted.")
-    }
+if let slug1 = try? "Hello, world".convertedToSlug() {
+    print(slug1)
+} else {
+    print("slug1 could not be converted.")
+}
 
-    if let slug2 = try? "!@$%^Hello, world!:|~?><".convertedToSlug() {
-        print(slug2)
-    } else {
-        print("slug2 could not be converted.")
-    }
+if let slug2 = try? "!@$%^Hello, world!:|~?><".convertedToSlug() {
+    print(slug2)
+} else {
+    print("slug2 could not be converted.")
+}
 
-    if let slug3 = try? "吃葡萄不吐葡萄皮".convertedToSlug() {
-        print(slug3)
-    } else {
-        print("slug3 could not be converted.")
-    }
+if let slug3 = try? "吃葡萄不吐葡萄皮".convertedToSlug() {
+    print(slug3)
+} else {
+    print("slug3 could not be converted.")
 }
 ```
 
