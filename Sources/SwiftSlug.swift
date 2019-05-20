@@ -39,7 +39,7 @@ extension String {
         #endif
 
         if let result = result {
-            if result.characters.count > 0 {
+            if result.count > 0 {
                 return result
             }
         }
